@@ -1,0 +1,31 @@
+from typing import List
+# https://leetcode.com/problems/product-of-array-except-self/
+
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        pre, post = [1] * n, [1] * n
+
+        acc = 1
+        for i in range(n):
+            acc *= nums[i]
+            pre[i] = acc
+        
+        acc = 1
+        for i in range(n-1, -1, -1):
+            acc *= nums[i]
+            post[i] = acc
+
+        res = [1] * n
+
+        for i in range(n):
+            if i == 0:
+                res[i] = post[i+1]
+            elif i == n - 1:
+                res[i] = pre[i - 1]
+            else:
+                res[i] = pre[i-1] * post[i+1]
+            
+
+        return res
+
