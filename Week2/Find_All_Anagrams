@@ -1,0 +1,80 @@
+from typing import List
+# https://leetcode.com/problems/find-all-anagrams-in-a-string/
+
+
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:     
+        p_len, s_len = len(p), len(s)
+        if p_len > s_len:
+            return [] 
+
+        res = []
+
+        """
+        #Solution 1
+        #Brute force O(nmlogm)
+        #----------------------------
+        p = sorted(p) #m log m
+
+        i = 0
+        j = i + p_len - 1
+
+
+        while j < len(s): # n
+            if sorted(s[i:j+1]) == p: #m log m
+                res.append(i)
+            i += 1
+            j += 1
+
+        return res
+        """
+
+        """
+        #Solution 2
+        #Counter O(n)
+        #---------------------
+        p_count = Counter(p)
+        s_count = Counter(s[:p_len - 1])
+
+        for i in range(s_len - p_len + 1): #O(n)
+            s_count[s[i + p_len - 1]] += 1 #O(1)
+            if p_count == s_count: #O(26) -> O(1)
+                res.append(i)
+            s_count[s[i]] -= 1
+
+        return res
+        """
+
+        #Solution 3
+        #Array O(n), O(1) space
+
+        p_count = [0] * 26 #O(1) space
+        s_count = [0] * 26 #O(1) space
+
+        for char in p:
+            p_count[ord(char) - ord('a')] += 1
+
+        for char in s[:p_len - 1]:
+            s_count[ord(char) - ord('a')] += 1
+
+        for i in range(s_len - p_len + 1): #O(1)
+            ind = i + p_len - 1
+            s_count[ord(s[ind]) - ord('a')] += 1
+            if s_count == p_count: #O(26) -> O(1)
+                res.append(i)
+            s_count[ord(s[i]) - ord('a')] -= 1
+
+        return res
+
+        
+
+
+        
+
+
+
+
+
+
+
+        
