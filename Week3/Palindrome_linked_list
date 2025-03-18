@@ -1,0 +1,48 @@
+from typing import Optional
+#https://leetcode.com/problems/palindrome-linked-list/
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        #One node is always a palindrome
+        if head.next is None:
+            return True
+
+        #Use a slow and fast pointer to find the middle
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        #Reverse the list from the middle
+        prev = None
+        curr = slow
+        while curr:
+            next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next
+
+        #Use two pointers from both directions to check for Palindrome
+        #3 cases:
+            #1: Size 2: curr will fall off the end after the first check
+                # so only checks 1 vs 2
+            #2: Odd number: Both will land on the middle and then
+                #curr will fall off
+            #3: Even number: Curr will fall of the end at the same time
+                #that start reaches the last value of the reverses list
+        start = head
+        while prev:
+            if prev.val != start.val:
+                return False
+            prev = prev.next
+            start = start.next
+
+        return True
+        
+
+
+        
