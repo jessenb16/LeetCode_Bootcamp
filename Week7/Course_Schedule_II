@@ -1,0 +1,31 @@
+from typing import List
+# https://leetcode.com/problems/course-schedule-ii/
+
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        graph = {i : [] for i in range(numCourses)}
+        indegree = [0] * numCourses
+
+
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
+            indegree[course] += 1
+
+        res = []
+
+        def dfs(node):
+            res.append(node)
+            indegree[node] -= 1
+
+            for edge in graph[node]:
+                indegree[edge] -= 1
+                if indegree[edge] == 0:
+                    dfs(edge)
+
+        for i in range(numCourses):
+            if indegree[i] == 0:
+                dfs(i)   
+
+        return res if len(res) == numCourses else []         
+
+            
